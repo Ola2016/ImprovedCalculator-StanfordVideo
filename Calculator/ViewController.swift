@@ -12,47 +12,63 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var displayValue: UILabel!
     
-    var results:Double = 0
-    var inputValue:Bool = false
-    var operation:String = "0"
+    var inputA:Double = 0
+    var inputB:Double = 0
+    var firstNumber:Bool = false
+    var isInputA:Bool = true
+    var operation:String = "";
     
     @IBAction func disPlayValue(sender: UIButton) {
         
         let getValueFromKeyBoard = sender.currentTitle!
         
-        if(inputValue){
+        if(firstNumber){
           displayValue.text = displayValue.text! + getValueFromKeyBoard
+            print("\(displayValue.text)")
         }
         else{
             displayValue.text = getValueFromKeyBoard
-            inputValue = true
+            firstNumber = true
+            if(getValueFromKeyBoard == "0"){
+                firstNumber = false
+            }
+        }
+        
+        if isInputA{
+            inputA = NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue
+        }
+        else{
+            inputB = NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue
         }
     }
     
     
     @IBAction func ResetDisplayValue(sender: UIButton) {
         displayValue.text = "\(0)"
-        results = 0
-        inputValue = false
-        operation = "0"
+        inputA = 0
+        inputB = 0
+        isInputA = true
+        firstNumber = false
+        operation = ""
     }
     
     @IBAction func operate(sender: UIButton) {
         operation = sender.currentTitle!
-        results = NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue
-        inputValue = false
+        isInputA = false
+        firstNumber = false
     }
     
     @IBAction func EqualButton(sender: UIButton) {
-        inputValue = false
+        firstNumber = false
             switch operation{
-            case"+":displayValue.text = "\(results + NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue)"
-            case"−": displayValue.text = "\(results - NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue)"
-            case"×": displayValue.text = "\(results * NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue)"
-            case"÷": displayValue.text = "\(results / NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue)"
+            case"+":displayValue.text = "\(inputA + inputB)"
+            case"−": displayValue.text = "\(inputA - inputB)"
+            case"×": displayValue.text = "\(inputA * inputB)"
+            case"÷": displayValue.text = "\(inputA / inputB)"
                 
             default: break
             }
+        inputA = NSNumberFormatter().numberFromString(displayValue.text!)!.doubleValue
 
     }
 }
